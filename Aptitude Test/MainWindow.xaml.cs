@@ -23,14 +23,11 @@ namespace Aptitude_Test
 		public int Score { get; private set; }
 		public double TimeRemaining { get; private set; }
 		public Difficulty CurrentLevel { get; private set; } 
-		public Response CorrectResponse { get; private set; }
-
-		private Random random;
+		public LEGResponse CorrectResponse { get; private set; }
 
 		public MainWindow()
 		{
 			InitializeComponent();
-			random = new Random();
 		}
 
 		public void Begin()
@@ -43,27 +40,36 @@ namespace Aptitude_Test
 
 		public void GeneratePuzzle()
 		{
-			Random random = new Random();
+			Equation left, right;
+			List<Operator> operators;
+
 			switch (CurrentLevel)
 			{
 				case Difficulty.Introduction:
-					LeftAnswer.Text = "1 + 2";
-					RightAnswer.Text = "4 - 3";
-					CorrectResponse = Response.Greater;
+					operators = new List<Operator>() { Operator.Add };
+					left = new TwoTermEquation(new Range(2, 4), new Range(1, 3), operators);
+					right = new TwoTermEquation(new Range(2, 4), new Range(1, 3), operators);
 					break;
 				case Difficulty.Addition:
-					int left = AdditionPuzzle(EquationTarget.Left);
-					int right = AdditionPuzzle(EquationTarget.Right);
-					if (left > right) CorrectResponse = Response.Greater;
-					else if (left == right) CorrectResponse = Response.Equal;
-					else CorrectResponse = Response.Less;
+					operators = new List<Operator>() { Operator.Add, Operator.Subtract };
+					left = new TwoTermEquation(new Range(1, 9), new Range(1, 9), operators);
+					right = new TwoTermEquation(new Range(1, 9), new Range(1, 9), operators);
 					break;
 				default:
+					operators = new List<Operator>() { Operator.Add };
+					left = new TwoTermEquation(new Range(1, 1), new Range(1, 1), operators);
+					right = new TwoTermEquation(new Range(1, 1), new Range(1, 1), operators);
 					break;
 			}
+
+			LeftAnswer.Text = left.GetString();
+			RightAnswer.Text = right.GetString();
+			if (left.GetValue() > right.GetValue()) CorrectResponse = LEGResponse.Greater;
+			else if (left.GetValue() == right.GetValue()) CorrectResponse = LEGResponse.Equal;
+			else CorrectResponse = LEGResponse.Less;
 		}
 
-		public void GradeResponse(Response response)
+		public void GradeResponse(LEGResponse response)
 		{
 			if (response == CorrectResponse)
 			{
@@ -78,36 +84,24 @@ namespace Aptitude_Test
 			}
 		}
 
-		#region Equation Generators
-		public int AdditionPuzzle(EquationTarget target)
-		{
-			int num1 = random.Next(1, 10);
-			int num2 = random.Next(1, 10);
-			int operand = random.Next(0, 2);
-			TextBlock textBlock = target == EquationTarget.Left ? LeftAnswer : RightAnswer;
-			textBlock.Text = string.Format("{0} {1} {2}", num1, operand == 0 ? '+' : '-', num2);
-			return operand == 0 ? num1 + num2 : num1 - num2;
-		}
-		#endregion
-
 		#region Events
 		private void Window_KeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.Key == Key.D1 || e.Key == Key.NumPad1)
 			{
-				GradeResponse(Response.Greater);
+				GradeResponse(LEGResponse.Greater);
 			}
 			else if (e.Key == Key.D2 || e.Key == Key.NumPad2)
 			{
-				GradeResponse(Response.Less);
+				GradeResponse(LEGResponse.Less);
 			}
 			else if (e.Key == Key.D3 || e.Key == Key.NumPad3)
 			{
-				GradeResponse(Response.Equal);
+				GradeResponse(LEGResponse.Equal);
 			}
 			else if (e.Key == Key.D4 || e.Key == Key.NumPad4)
 			{
-				GradeResponse(Response.Greater);
+				GradeResponse(LEGResponse.Greater);
 			}
 		}
 
@@ -117,19 +111,4 @@ namespace Aptitude_Test
 		}
 		#endregion
 	}
-}
-
-public enum EquationTarget
-{
-	Left, Right
-}
-
-public enum Response
-{
-	Greater, Less, Equal
-}
-
-public enum Difficulty
-{
-	Introduction, Addition, Multiplication, AddMultiply, four, five, six
 }
