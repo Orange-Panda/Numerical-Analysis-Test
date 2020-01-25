@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Aptitude_Test
 {
@@ -11,7 +7,7 @@ namespace Aptitude_Test
 	/// </summary>
 	public static class Calculation
 	{
-		public static Random random = new Random();
+		private static readonly Random random = new Random();
 
 		/// <summary>
 		/// Calculates value for a two term expression
@@ -102,37 +98,5 @@ namespace Aptitude_Test
 			min = Math.Min(num1, num2);
 			max = Math.Max(num1, num2);
 		}
-	}
-
-	/// <summary>
-	/// Different types of operators that can be created.
-	/// </summary>
-	public enum Operator
-	{
-		Add, Subtract, Multiply, Divide, Mod
-	}
-
-	/// <summary>
-	/// Regions for the equation to be displayed at.
-	/// </summary>
-	public enum EquationTarget
-	{
-		Left, Right
-	}
-
-	/// <summary>
-	/// Types of user input for "Less than, Equal to, Greater than" questions.
-	/// </summary>
-	public enum LEGResponse
-	{
-		Greater, Less, Equal
-	}
-
-	/// <summary>
-	/// The escalating difficulties the assessment will reach
-	/// </summary>
-	public enum Difficulty
-	{
-		Introduction, Addition, Multiplication, AddMultiply, four, five, six
 	}
 }

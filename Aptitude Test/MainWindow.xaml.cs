@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Aptitude_Test
 {
@@ -20,67 +8,43 @@ namespace Aptitude_Test
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		public int Score { get; private set; }
-		public double TimeRemaining { get; private set; }
-		public Difficulty CurrentLevel { get; private set; } 
-		public LEGResponse CorrectResponse { get; private set; }
+		private TestSession testSession;
 
 		public MainWindow()
 		{
 			InitializeComponent();
 		}
 
+		/// <summary>
+		/// Starts a new testing session
+		/// </summary>
 		public void Begin()
 		{
-			Score = 0;
-			TimeRemaining = 30;
-			CurrentLevel = Difficulty.Introduction;
-			GeneratePuzzle();
+			testSession = new TestSession();
+			UpdateEquations();
 		}
 
-		public void GeneratePuzzle()
+		/// <summary>
+		/// Draws the equations to the screen
+		/// </summary>
+		public void UpdateEquations()
 		{
-			Equation left, right;
-			List<Operator> operators;
+			LEGProblemPanel.Visibility = testSession.Problem.GetType() == typeof(LEGProblem) ? Visibility.Visible : Visibility.Hidden;
+			MultipleChoicePanel.Visibility = testSession.Problem.GetType() == typeof(MultipleChoiceProblem) ? Visibility.Visible : Visibility.Hidden;
 
-			switch (CurrentLevel)
+			if (testSession.Problem.GetType() == typeof(LEGProblem))
 			{
-				case Difficulty.Introduction:
-					operators = new List<Operator>() { Operator.Add };
-					left = new TwoTermEquation(new Range(2, 4), new Range(1, 3), operators);
-					right = new TwoTermEquation(new Range(2, 4), new Range(1, 3), operators);
-					break;
-				case Difficulty.Addition:
-					operators = new List<Operator>() { Operator.Add, Operator.Subtract };
-					left = new TwoTermEquation(new Range(1, 9), new Range(1, 9), operators);
-					right = new TwoTermEquation(new Range(1, 9), new Range(1, 9), operators);
-					break;
-				default:
-					operators = new List<Operator>() { Operator.Add };
-					left = new TwoTermEquation(new Range(1, 1), new Range(1, 1), operators);
-					right = new TwoTermEquation(new Range(1, 1), new Range(1, 1), operators);
-					break;
+				LeftAnswer.Text = ((LEGProblem)testSession.Problem).Left.GetString();
+				RightAnswer.Text = ((LEGProblem)testSession.Problem).Right.GetString();
 			}
-
-			LeftAnswer.Text = left.GetString();
-			RightAnswer.Text = right.GetString();
-			if (left.GetValue() > right.GetValue()) CorrectResponse = LEGResponse.Greater;
-			else if (left.GetValue() == right.GetValue()) CorrectResponse = LEGResponse.Equal;
-			else CorrectResponse = LEGResponse.Less;
-		}
-
-		public void GradeResponse(LEGResponse response)
-		{
-			if (response == CorrectResponse)
+			else if (testSession.Problem.GetType() == typeof(MultipleChoiceProblem))
 			{
-				CurrentLevel = Difficulty.Addition;
-				GeneratePuzzle();
-				Console.Text = "Correct!";
-			}
-			else
-			{
-				TimeRemaining -= 5;
-				Console.Text = "Incorrect";
+				MultipleChoiceProblem problem = (MultipleChoiceProblem)testSession.Problem;
+				Equation.Text = problem.Equation.GetMysteryString(problem.MysteryIndex);
+				MC1.Text = problem.Answers[0].ToString();
+				MC2.Text = problem.Answers[1].ToString();
+				MC3.Text = problem.Answers[2].ToString();
+				MC4.Text = problem.Answers[3].ToString();
 			}
 		}
 
@@ -89,20 +53,23 @@ namespace Aptitude_Test
 		{
 			if (e.Key == Key.D1 || e.Key == Key.NumPad1)
 			{
-				GradeResponse(LEGResponse.Greater);
+				testSession.UserInput(0);
 			}
 			else if (e.Key == Key.D2 || e.Key == Key.NumPad2)
 			{
-				GradeResponse(LEGResponse.Less);
+				testSession.UserInput(1);
 			}
 			else if (e.Key == Key.D3 || e.Key == Key.NumPad3)
 			{
-				GradeResponse(LEGResponse.Equal);
+				testSession.UserInput(2);
 			}
 			else if (e.Key == Key.D4 || e.Key == Key.NumPad4)
 			{
-				GradeResponse(LEGResponse.Greater);
+				testSession.UserInput(3);
 			}
+
+			Console.Text = string.Format("{0} {1}", testSession.Score, testSession.TimeRemaining);
+			UpdateEquations();
 		}
 
 		private void Start_Click(object sender, RoutedEventArgs e)

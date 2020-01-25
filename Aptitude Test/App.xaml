@@ -11,6 +11,13 @@
 			<Setter Property="Foreground" Value="White"/>
 			<Setter Property="TextAlignment" Value="Center"/>
 		</Style>
+		<Style x:Key="Choice" TargetType="TextBlock">
+			<Setter Property="Width" Value="128"/>
+			<Setter Property="Height" Value="128"/>
+			<Setter Property="FontSize" Value="72"/>
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="TextAlignment" Value="Center"/>
+		</Style>
 		<Style x:Key="Timer" TargetType="TextBlock">
 			<Setter Property="Width" Value="128"/>
 			<Setter Property="Height" Value="32"/>

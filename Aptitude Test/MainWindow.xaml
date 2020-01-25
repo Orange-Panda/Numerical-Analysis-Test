@@ -8,8 +8,24 @@
 		KeyDown="Window_KeyDown"
         Title="MainWindow" Height="720" Width="1280">
 	<Grid Background="#FF191919">
-		<TextBlock Text="2+2=4" Style="{ StaticResource Equation }" x:Name="LeftAnswer" HorizontalAlignment="Left"/>
-		<TextBlock Text="2+2=4" Style="{ StaticResource Equation }" x:Name="RightAnswer" HorizontalAlignment="Right"/>
+		<!--LEG Problem-->
+		<Grid x:Name="LEGProblemPanel" Visibility="Hidden">
+			<TextBlock Text="1 + 1" Style="{ StaticResource Equation }" x:Name="LeftAnswer" HorizontalAlignment="Left"/>
+			<TextBlock Text="2 + 1" Style="{ StaticResource Equation }" x:Name="RightAnswer" HorizontalAlignment="Right"/>
+		</Grid>
+		
+		<!--Multiple Choice Problem-->
+		<Grid x:Name="MultipleChoicePanel" Visibility="Hidden">
+			<TextBlock Text="1 + __ = 3" Style="{ StaticResource Equation }" x:Name="Equation" HorizontalAlignment="Center"/>
+			<DockPanel VerticalAlignment="Bottom" Margin="0,0,0,90" LastChildFill="False" HorizontalAlignment="Center">
+				<TextBlock Text="1" Style="{ StaticResource Choice }" x:Name="MC1" HorizontalAlignment="Center"/>
+				<TextBlock Text="2" Style="{ StaticResource Choice }" x:Name="MC2" HorizontalAlignment="Center"/>
+				<TextBlock Text="3" Style="{ StaticResource Choice }" x:Name="MC3" HorizontalAlignment="Center"/>
+				<TextBlock Text="4" Style="{ StaticResource Choice }" x:Name="MC4" HorizontalAlignment="Center"/>
+			</DockPanel>
+		</Grid>
+		
+		<!--Constants-->
 		<TextBlock Text="0:30" Style="{ StaticResource Timer }" x:Name="Clock" VerticalAlignment="Top"/>
 		<TextBlock Text="Testing" Style="{StaticResource Equation}" x:Name="Console" VerticalAlignment="Bottom"/>
 		<Button Content="Start" x:Name="Start" Click="Start_Click" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
