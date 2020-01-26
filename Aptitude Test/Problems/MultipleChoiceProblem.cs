@@ -8,23 +8,19 @@ namespace Aptitude_Test
 	class MultipleChoiceProblem : Problem
 	{
 		public Equation Equation { get; private set; }
-		public int[] Answers { get; private set; } = new int[4];
+		public double[] Answers { get; private set; } = new double[4];
 		public int CorrectIndex { get; private set; } = 0;
 		public int MysteryIndex { get; private set; } = 0;
 
 		public MultipleChoiceProblem(Difficulty difficulty)
 		{
-			switch (difficulty)
+			Equation = Calc.CreateEquation(difficulty);
+			MysteryIndex = Calc.RandomRange(new Range(0, 2));
+			CorrectIndex = Calc.RandomRange(new Range(0, 3));
+
+			for (int i = 0; i < 4; i++)
 			{
-				default:
-					Equation = new TwoTermEquation(new Range(1, 9), new Range(1, 9), new List<Operator>() { Operator.Add });
-					MysteryIndex = Calculation.RandomRange(new Range(0, 2));
-					CorrectIndex = Calculation.RandomRange(new Range(0, 3));
-					for (int i = 0; i < 4; i++)
-					{
-						Answers[i] = i == CorrectIndex ? Equation.GetMysteryValue(MysteryIndex) : Equation.GetMysteryValue(MysteryIndex) + 3;
-					}
-					break;
+				Answers[i] = i == CorrectIndex ? Equation.GetMysteryValue(MysteryIndex) : Equation.GetMysteryValue(MysteryIndex) + 3;
 			}
 		}
 

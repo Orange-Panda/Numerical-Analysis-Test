@@ -1,13 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Aptitude_Test
 {
 	/// <summary>
 	/// Contains static methods for calculating.
 	/// </summary>
-	public static class Calculation
+	public static class Calc
 	{
 		private static readonly Random random = new Random();
+		public static readonly Dictionary<OperatorCategory, List<Operator>> operators = new Dictionary<OperatorCategory, List<Operator>>()
+		{
+			{ OperatorCategory.AddSub, new List<Operator>() { Operator.Add, Operator.Subtract } },
+			{ OperatorCategory.MultiDivid, new List<Operator>() { Operator.Multiply, Operator.Divide } },
+			{ OperatorCategory.Mod, new List<Operator>() { Operator.Mod } },
+			{ OperatorCategory.Arithmetic, new List<Operator>() { Operator.Add, Operator.Subtract, Operator.Multiply, Operator.Divide } },
+			{ OperatorCategory.All, new List<Operator>() { Operator.Add, Operator.Subtract, Operator.Multiply, Operator.Divide, Operator.Mod } },
+		};
 
 		/// <summary>
 		/// Calculates value for a two term expression
@@ -16,7 +25,7 @@ namespace Aptitude_Test
 		/// <param name="num2">Right term of equation</param>
 		/// <param name="operation">Operator performed on terms</param>
 		/// <returns>Resulting integer</returns>
-		public static int CalculateValue(int num1, int num2, Operator operation)
+		public static double CalculateValue(double num1, double num2, Operator operation)
 		{
 			switch (operation)
 			{
@@ -68,6 +77,29 @@ namespace Aptitude_Test
 					return '?';
 			}
 		}
+
+		public static Equation CreateEquation(Difficulty difficulty)
+		{
+			switch (difficulty)
+			{
+				case Difficulty.Introduction:
+					return new TwoTermEquation(new Range(2, 4), new Range(1, 3), operators[OperatorCategory.AddSub]);
+				case Difficulty.Basic:
+					return new TwoTermEquation(new Range(4, 6), new Range(2, 4), operators[OperatorCategory.AddSub]);
+				case Difficulty.Novice:
+					return new TwoTermEquation(new Range(4, 9), new Range(2, 8), operators[OperatorCategory.MultiDivid]);
+				case Difficulty.Intermediate:
+					return new TwoTermEquation(new Range(3, 15), new Range(3, 15), operators[OperatorCategory.Arithmetic]);
+				case Difficulty.Hard:
+					return new ThreeTermEquation(new Range(3, 15), new Range(3, 15), new Range(3, 15), operators[OperatorCategory.Arithmetic], operators[OperatorCategory.Arithmetic]);
+				case Difficulty.Challenging:
+					return new ThreeTermEquation(new Range(5, 30), new Range(2, 5), new Range(3, 15), operators[OperatorCategory.Mod], operators[OperatorCategory.Arithmetic]);
+				case Difficulty.Maximum:
+					return new FourTermEquation(new Range(5, 30), new Range(2, 5), new Range(3, 15), new Range(3, 15), operators[OperatorCategory.Mod], operators[OperatorCategory.Arithmetic], operators[OperatorCategory.Arithmetic]);
+				default:
+					return new TwoTermEquation(new Range(1, 1), new Range(1, 1), operators[OperatorCategory.Mod]);
+			}
+		}
 	}
 
 	/// <summary>
@@ -98,5 +130,10 @@ namespace Aptitude_Test
 			min = Math.Min(num1, num2);
 			max = Math.Max(num1, num2);
 		}
+	}
+
+	public enum OperatorCategory
+	{
+		AddSub, MultiDivid, Mod, Arithmetic, All
 	}
 }

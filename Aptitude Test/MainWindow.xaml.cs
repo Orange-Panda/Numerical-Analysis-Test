@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System;
+using System.Timers;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Aptitude_Test
@@ -9,10 +11,27 @@ namespace Aptitude_Test
 	public partial class MainWindow : Window
 	{
 		private TestSession testSession;
+		public static Timer timer = new Timer(100);
 
 		public MainWindow()
 		{
 			InitializeComponent();
+
+			timer.Elapsed += Timer_Elapsed;
+			timer.AutoReset = true;
+			timer.Enabled = true;
+		}
+
+		private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+		{
+			if (testSession == null) return;
+
+			Dispatcher.Invoke(() =>
+			{
+				TimeSpan timeSpan = TimeSpan.FromSeconds(testSession.TimeRemaining);
+				Clock.Text = string.Format("{0}:{1:D2}", timeSpan.Minutes, timeSpan.Seconds);
+			});
+
 		}
 
 		/// <summary>
@@ -68,7 +87,6 @@ namespace Aptitude_Test
 				testSession.UserInput(3);
 			}
 
-			Console.Text = string.Format("{0} {1}", testSession.Score, testSession.TimeRemaining);
 			UpdateEquations();
 		}
 

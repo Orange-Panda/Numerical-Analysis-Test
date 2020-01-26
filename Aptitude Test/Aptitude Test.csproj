@@ -55,8 +55,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="MultipleChoiceProblem.cs" />
+    <Compile Include="Equations\FourTermEquation.cs" />
+    <Compile Include="Problems\MultipleChoiceProblem.cs" />
     <Compile Include="TestSession.cs" />
+    <Compile Include="Equations\ThreeTermEquation.cs" />
+    <Compile Include="Equations\TwoTermEquation.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -65,16 +68,16 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Calculation.cs" />
-    <Compile Include="Equation.cs" />
-    <Compile Include="LEGProblem.cs" />
+    <Compile Include="Calc.cs" />
+    <Compile Include="Equations\Equation.cs" />
+    <Compile Include="Problems\LEGProblem.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Problem.cs" />
+    <Compile Include="Problems\Problem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

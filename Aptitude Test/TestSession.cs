@@ -1,4 +1,7 @@
-﻿namespace Aptitude_Test
+﻿using System;
+using System.Timers;
+
+namespace Aptitude_Test
 {
 	/// <summary>
 	/// Manages data related to the testing session
@@ -9,6 +12,8 @@
 		public double TimeRemaining { get; private set; }
 		public Difficulty CurrentLevel { get; private set; }
 		public Problem Problem { get; private set; }
+		public bool TestStarted { get; private set; }
+		private int incrementingScore = 2;
 
 		/// <summary>
 		/// Initialize a test session
@@ -16,9 +21,18 @@
 		public TestSession()
 		{
 			Score = 0;
-			TimeRemaining = 30;
+			TimeRemaining = 120;
 			CurrentLevel = Difficulty.Introduction;
 			GenerateProblem(ProblemType.LEG);
+			MainWindow.timer.Elapsed += Timer_Elapsed;
+		}
+
+		private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+		{
+			if (TestStarted)
+			{
+				TimeRemaining -= 0.1;
+			}
 		}
 
 		/// <summary>
@@ -46,13 +60,26 @@
 		{
 			if (outcome == ProblemEvaluation.Correct)
 			{
+				TestStarted = true;
 				Score++;
-				CurrentLevel = Difficulty.Addition;
-				GenerateProblem(Calculation.RandomRange(new Range(0, 1)) == 0 ? ProblemType.LEG : ProblemType.MultipleChoice);
+				incrementingScore++;
+				CheckDifficulty();
+				GenerateProblem(incrementingScore % 2 == 0 ? ProblemType.LEG : ProblemType.MultipleChoice);
 			}
-			else if (outcome == ProblemEvaluation.Incorrect)
+			else if (outcome == ProblemEvaluation.Incorrect && CurrentLevel != Difficulty.Introduction)
 			{
 				TimeRemaining -= 5;
+				CurrentLevel = (Difficulty)Math.Max(1, (int)CurrentLevel - 1);
+				incrementingScore = 0;
+				GenerateProblem(incrementingScore % 2 == 0 ? ProblemType.LEG : ProblemType.MultipleChoice);
+			}
+		}
+
+		private void CheckDifficulty()
+		{
+			if (incrementingScore >= 3)
+			{
+				CurrentLevel = (Difficulty)Math.Min(Enum.GetNames(typeof(Difficulty)).Length - 1, (int)CurrentLevel + 1);
 			}
 		}
 
@@ -71,6 +98,6 @@
 	/// </summary>
 	public enum Difficulty
 	{
-		Introduction, Addition, Multiplication, AddMultiply, four, five, six
+		Introduction, Basic, Novice, Intermediate, Hard, Challenging, Maximum
 	}
 }

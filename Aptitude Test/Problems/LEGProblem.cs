@@ -12,26 +12,8 @@ namespace Aptitude_Test
 
 		public LEGProblem(Difficulty difficulty)
 		{
-			List<Operator> operators;
-
-			switch (difficulty)
-			{
-				case Difficulty.Introduction:
-					operators = new List<Operator>() { Operator.Add };
-					Left = new TwoTermEquation(new Range(2, 4), new Range(1, 3), operators);
-					Right = new TwoTermEquation(new Range(2, 4), new Range(1, 3), operators);
-					break;
-				case Difficulty.Addition:
-					operators = new List<Operator>() { Operator.Add, Operator.Subtract };
-					Left = new TwoTermEquation(new Range(1, 9), new Range(1, 9), operators);
-					Right = new TwoTermEquation(new Range(1, 9), new Range(1, 9), operators);
-					break;
-				default:
-					operators = new List<Operator>() { Operator.Add };
-					Left = new TwoTermEquation(new Range(1, 1), new Range(1, 1), operators);
-					Right = new TwoTermEquation(new Range(1, 1), new Range(1, 1), operators);
-					break;
-			}
+			Left = Calc.CreateEquation(difficulty);
+			Right = Calc.CreateEquation(difficulty);
 		}
 
 		public override ProblemEvaluation GradeResponse(int response)
