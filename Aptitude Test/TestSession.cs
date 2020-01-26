@@ -15,7 +15,6 @@ namespace Aptitude_Test
 		public Problem LastProblem { get; private set; }
 		public ProblemEvaluation LastEvaluation { get; private set; } = ProblemEvaluation.Null;
 		public int LastScoreGain { get; private set; } = 0;
-		public bool TestStarted => CurrentLevel != Difficulty.Introduction;
 		public bool TestActive => TimeRemaining > 0;
 		private int incrementingScore = 1;
 
@@ -33,7 +32,7 @@ namespace Aptitude_Test
 
 		private void Timer_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			if (TestStarted)
+			if (CurrentLevel != Difficulty.Introduction)
 			{
 				TimeRemaining -= 0.1;
 				if (TimeRemaining <= 0) EndSession();
@@ -90,6 +89,9 @@ namespace Aptitude_Test
 			}
 		}
 
+		/// <summary>
+		/// Checks if the difficulty should be increased based on user performance.
+		/// </summary>
 		private void CheckDifficulty()
 		{
 			if (incrementingScore >= 3)

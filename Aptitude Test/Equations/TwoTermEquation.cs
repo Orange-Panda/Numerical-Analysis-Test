@@ -12,6 +12,12 @@ namespace Aptitude_Test
 		public int num2;
 		public Operator op1;
 
+		/// <summary>
+		/// Randomly generates a two term equation.
+		/// </summary>
+		/// <param name="num1">The range of numbers that the first integer can be generated as</param>
+		/// <param name="num2">The range of numbers that the second integer can be generated as</param>
+		/// <param name="op1">The potential operators that can be generated for the first operator</param>
 		public TwoTermEquation(Range num1, Range num2, List<Operator> op1)
 		{
 			this.num1 = Calc.RandomRange(num1);

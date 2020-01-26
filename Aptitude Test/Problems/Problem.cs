@@ -5,6 +5,11 @@
 	/// </summary>
 	public abstract class Problem
 	{
+		/// <summary>
+		/// Determines if the user input was correct or not.
+		/// </summary>
+		/// <param name="response">The index of user input</param>
+		/// <returns>Correct, incorrect, or invalid</returns>
 		public abstract ProblemEvaluation GradeResponse(int response);
 	}
 

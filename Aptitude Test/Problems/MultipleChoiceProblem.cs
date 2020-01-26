@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Aptitude_Test
 {
@@ -8,22 +7,28 @@ namespace Aptitude_Test
 	/// </summary>
 	class MultipleChoiceProblem : Problem
 	{
-		public Equation Equation { get; private set; }
 		public double[] Answers { get; private set; } = new double[4];
-		public int CorrectIndex { get; private set; } = 0;
-		public int MysteryIndex { get; private set; } = 0;
+
+		private Equation equation;
+		private int mysteryIndex = 0;
 		private static int falseType = 0;
+		private int correctIndex = 0;
 
 		public MultipleChoiceProblem(Difficulty difficulty)
 		{
-			Equation = Calc.CreateEquation(difficulty);
-			MysteryIndex = Calc.RandomRange(Equation.GetType() == typeof(TwoTermEquation) ? new Range(0, 2) : new Range(2, 3));
-			CorrectIndex = Calc.RandomRange(new Range(0, 3));
+			equation = Calc.CreateEquation(difficulty);
+			mysteryIndex = Calc.RandomRange(equation.GetType() == typeof(TwoTermEquation) ? new Range(0, 2) : new Range(2, 3));
+			correctIndex = Calc.RandomRange(new Range(0, 3));
 
 			for (int i = 0; i < 4; i++)
 			{
-				Answers[i] = i == CorrectIndex ? Equation.GetMysteryValue(MysteryIndex) : Math.Round(GetFalseValue(Equation.GetMysteryValue(MysteryIndex)), 1);
+				Answers[i] = i == correctIndex ? equation.GetMysteryValue(mysteryIndex) : Math.Round(GetFalseValue(equation.GetMysteryValue(mysteryIndex)), 1);
 			}
+		}
+
+		public string GetMysteryString()
+		{
+			return equation.GetMysteryString(mysteryIndex);
 		}
 
 		private double GetFalseValue(double trueValue)
@@ -55,7 +60,7 @@ namespace Aptitude_Test
 
 		public override ProblemEvaluation GradeResponse(int response)
 		{
-			return response == CorrectIndex ? ProblemEvaluation.Correct : ProblemEvaluation.Incorrect;
+			return response == correctIndex ? ProblemEvaluation.Correct : ProblemEvaluation.Incorrect;
 		}
 	}
 }

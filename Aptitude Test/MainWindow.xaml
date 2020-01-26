@@ -6,14 +6,14 @@
         xmlns:local="clr-namespace:Aptitude_Test"
         mc:Ignorable="d"
 		KeyDown="Window_KeyDown"
-        Title="MainWindow" Height="720" Width="1280" MinWidth="1024" MinHeight="600">
+        Title="Numerical Reasoning Test" Height="720" Width="1280" MinWidth="1024" MinHeight="600">
 	<Grid Background="#FF101010">
 		<!--Background-->
 		<Rectangle Fill="#FF151515" Stroke="#FF696969" Margin="10" StrokeThickness="3"/>
 
 		<Grid Margin="25">
 			<!--Welcome State-->
-			<Grid x:Name="WelcomePanel" Visibility="Visible">
+			<Grid x:Name="WelcomePanel" Visibility="Hidden">
 				<StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
 					<Image Source="Images/Logo.png" Margin="32" HorizontalAlignment="Center" VerticalAlignment="Top" Width="512"/>
 					<TextBlock Foreground="White" TextAlignment="Center" Text="Welcome!" VerticalAlignment="Center" Height="48" Width="256" FontSize="32" HorizontalAlignment="Center"/>
@@ -71,8 +71,9 @@
 			</Grid>
 			
 			<!--Results-->
-			<Grid x:Name="ResultsPanel" Visibility="Hidden">
+			<Grid x:Name="ResultsPanel" Visibility="Visible">
 				<StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+					<TextBlock Foreground="White" x:Name="FinalScore" TextAlignment="Center" Text="0" VerticalAlignment="Center" Height="80" Width="256" FontSize="64" HorizontalAlignment="Center"/>
 					<TextBlock Foreground="White" TextAlignment="Center" Text="Test Completed!" VerticalAlignment="Center" Height="48" Width="256" FontSize="32" HorizontalAlignment="Center"/>
 					<TextBlock Foreground="White" TextAlignment="Center" Text="Press [Enter] to begin a new test!" VerticalAlignment="Center" Height="48" Width="384" FontSize="18" HorizontalAlignment="Center"/>
 				</StackPanel>

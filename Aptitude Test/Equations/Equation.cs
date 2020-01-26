@@ -1,15 +1,10 @@
-﻿using System.Collections.Generic;
-
-namespace Aptitude_Test
+﻿namespace Aptitude_Test
 {
 	/// <summary>
-	/// Base class for an equation datatype
+	/// Abstract base class for an equation datatype
 	/// </summary>
 	public abstract class Equation
 	{
-		internal Stack<double> numbers;
-		internal Stack<Operator> operators;
-
 		/// <summary>
 		/// Get the answer value to the equation
 		/// </summary>

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Aptitude_Test
 {
+	/// <summary>
+	/// An equation with three terms and two operators (e.g 4 + 3 * 2)
+	/// </summary>
 	public class ThreeTermEquation : Equation
 	{
 		public int num1;
@@ -11,6 +14,14 @@ namespace Aptitude_Test
 		public Operator op1;
 		public Operator op2;
 
+		/// <summary>
+		/// Randomly generates a three term equation
+		/// </summary>
+		/// <param name="num1">The range of numbers that the first integer can be generated as</param>
+		/// <param name="num2">The range of numbers that the second integer can be generated as</param>
+		/// <param name="num3">The range of numbers that the third integer can be generated as</param>
+		/// <param name="op1">The potential operators that can be generated for the first operator</param>
+		/// <param name="op2">The potential operators that can be generated for the second operator</param>
 		public ThreeTermEquation(Range num1, Range num2, Range num3, List<Operator> op1, List<Operator> op2)
 		{
 			this.num1 = Calc.RandomRange(num1);
@@ -22,7 +33,7 @@ namespace Aptitude_Test
 
 		public override double GetValue()
 		{
-			if ((int)op1 < 2)
+			if ((int)op1 < 2 && (int)op2 >= 2)
 			{
 				double rightResult = Calc.CalculateValue(num2, num3, op2);
 				return Math.Round(Calc.CalculateValue(num1, rightResult, op1), 1);

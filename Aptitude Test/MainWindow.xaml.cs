@@ -68,6 +68,7 @@ namespace Aptitude_Test
 			TimeSpan timeSpan = TimeSpan.FromSeconds(testSession != null ? testSession.TimeRemaining : 120);
 			Clock.Text = string.Format("{0}:{1:D2}", timeSpan.Minutes, timeSpan.Seconds);
 			Score.Text = testSession != null ? testSession.Score.ToString() : "0";
+			FinalScore.Text = testSession != null ? testSession.Score.ToString() : "0";
 			Difficulty.Text = string.Concat(Enumerable.Repeat('★', testSession != null ? (int)testSession.CurrentLevel : 0));
 
 			//Scoring feedback
@@ -81,7 +82,7 @@ namespace Aptitude_Test
 			WelcomePanel.Visibility = windowState == Aptitude_Test.WindowState.Welcome ? Visibility.Visible : Visibility.Hidden;
 			LEGProblemPanel.Visibility = testing && testSession.Problem.GetType() == typeof(LEGProblem) ? Visibility.Visible : Visibility.Hidden;
 			MultipleChoicePanel.Visibility = testing && testSession.Problem.GetType() == typeof(MultipleChoiceProblem) ? Visibility.Visible : Visibility.Hidden;
-			ResultsPanel.Visibility = windowState == Aptitude_Test.WindowState.Results ? Visibility.Visible : Visibility.Hidden; 
+			ResultsPanel.Visibility = windowState == Aptitude_Test.WindowState.Results ? Visibility.Visible : Visibility.Hidden;
 
 			//Panel contents
 			if (testSession != null && testSession.Problem.GetType() == typeof(LEGProblem))
@@ -93,16 +94,12 @@ namespace Aptitude_Test
 			else if (testSession != null && testSession.Problem.GetType() == typeof(MultipleChoiceProblem))
 			{
 				MultipleChoiceProblem problem = (MultipleChoiceProblem)testSession.Problem;
-				Equation.Text = problem.Equation.GetMysteryString(problem.MysteryIndex);
+				Equation.Text = problem.GetMysteryString();
 				MC1.Text = problem.Answers[0].ToString();
 				MC2.Text = problem.Answers[1].ToString();
 				MC3.Text = problem.Answers[2].ToString();
 				MC4.Text = problem.Answers[3].ToString();
 				MCInstruction.Visibility = testSession.CurrentLevel == Aptitude_Test.Difficulty.Introduction ? Visibility.Visible : Visibility.Hidden;
-			}
-			else if (testSession != null)
-			{
-
 			}
 		}
 

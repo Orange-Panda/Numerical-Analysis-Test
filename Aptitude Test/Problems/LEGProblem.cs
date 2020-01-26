@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Aptitude_Test
+﻿namespace Aptitude_Test
 {
 	/// <summary>
 	/// Problem where the user has to determine if the left side of the problem is greater than, less than, or equal to the right side.

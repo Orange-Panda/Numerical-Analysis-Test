@@ -55,7 +55,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Equations\FourTermEquation.cs" />
     <Compile Include="Problems\MultipleChoiceProblem.cs" />
     <Compile Include="TestSession.cs" />
     <Compile Include="Equations\ThreeTermEquation.cs" />

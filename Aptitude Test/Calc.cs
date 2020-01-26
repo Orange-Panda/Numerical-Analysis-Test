@@ -78,6 +78,11 @@ namespace Aptitude_Test
 			}
 		}
 
+		/// <summary>
+		/// Creates an equation at the target difficulty level.
+		/// </summary>
+		/// <param name="difficulty">The difficulty of the equation to generate</param>
+		/// <returns>A reference to the equation generated</returns>
 		public static Equation CreateEquation(Difficulty difficulty)
 		{
 			switch (difficulty)
@@ -95,7 +100,6 @@ namespace Aptitude_Test
 				case Difficulty.Challenging:
 				case Difficulty.Maximum:
 					return new ThreeTermEquation(new Range(5, 30), new Range(2, 5), new Range(3, 15), operators[OperatorCategory.Mod], operators[OperatorCategory.Arithmetic]);
-					//return new FourTermEquation(new Range(5, 30), new Range(2, 5), new Range(3, 15), new Range(3, 15), operators[OperatorCategory.Mod], operators[OperatorCategory.Arithmetic], operators[OperatorCategory.Arithmetic]);
 				default:
 					return new TwoTermEquation(new Range(1, 1), new Range(1, 1), operators[OperatorCategory.Mod]);
 			}
@@ -132,6 +136,9 @@ namespace Aptitude_Test
 		}
 	}
 
+	/// <summary>
+	/// The different categories of operators to be generated
+	/// </summary>
 	public enum OperatorCategory
 	{
 		AddSub, MultiDivid, Mod, Arithmetic, All
