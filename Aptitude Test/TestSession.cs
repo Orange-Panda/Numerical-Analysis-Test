@@ -12,8 +12,12 @@ namespace Aptitude_Test
 		public double TimeRemaining { get; private set; }
 		public Difficulty CurrentLevel { get; private set; }
 		public Problem Problem { get; private set; }
-		public bool TestStarted { get; private set; }
-		private int incrementingScore = 2;
+		public Problem LastProblem { get; private set; }
+		public ProblemEvaluation LastEvaluation { get; private set; } = ProblemEvaluation.Null;
+		public int LastScoreGain { get; private set; } = 0;
+		public bool TestStarted => CurrentLevel != Difficulty.Introduction;
+		public bool TestActive => TimeRemaining > 0;
+		private int incrementingScore = 1;
 
 		/// <summary>
 		/// Initialize a test session
@@ -32,6 +36,7 @@ namespace Aptitude_Test
 			if (TestStarted)
 			{
 				TimeRemaining -= 0.1;
+				if (TimeRemaining <= 0) EndSession();
 			}
 		}
 
@@ -41,6 +46,11 @@ namespace Aptitude_Test
 		/// <param name="testType">The type of problem to generate.</param>
 		public void GenerateProblem(ProblemType testType)
 		{
+			if (Problem != null)
+			{
+				LastProblem = Problem;
+			}
+
 			switch (testType)
 			{
 				case ProblemType.LEG:
@@ -58,20 +68,25 @@ namespace Aptitude_Test
 		/// <param name="outcome"></param>
 		public void ProcessResult(ProblemEvaluation outcome)
 		{
+			LastEvaluation = outcome;
+			LastScoreGain = 0;
+
 			if (outcome == ProblemEvaluation.Correct)
 			{
-				TestStarted = true;
-				Score++;
+				Score += Math.Max((int)CurrentLevel, 1);
+				LastScoreGain = Math.Max((int)CurrentLevel, 1);
 				incrementingScore++;
 				CheckDifficulty();
-				GenerateProblem(incrementingScore % 2 == 0 ? ProblemType.LEG : ProblemType.MultipleChoice);
+				GenerateProblem(Problem.GetType() == typeof(LEGProblem) ? ProblemType.MultipleChoice : ProblemType.LEG);
 			}
 			else if (outcome == ProblemEvaluation.Incorrect && CurrentLevel != Difficulty.Introduction)
 			{
-				TimeRemaining -= 5;
+				TimeRemaining -= (int)CurrentLevel + 2;
+				Score = Math.Max(0, Score - 2);
+				LastScoreGain = -2;
 				CurrentLevel = (Difficulty)Math.Max(1, (int)CurrentLevel - 1);
 				incrementingScore = 0;
-				GenerateProblem(incrementingScore % 2 == 0 ? ProblemType.LEG : ProblemType.MultipleChoice);
+				GenerateProblem(Problem.GetType() == typeof(LEGProblem) ? ProblemType.LEG : ProblemType.MultipleChoice);
 			}
 		}
 
@@ -89,7 +104,15 @@ namespace Aptitude_Test
 		/// <param name="number">The index of user input</param>
 		public void UserInput(int number)
 		{
-			ProcessResult(Problem.GradeResponse(number));
+			if (TestActive)
+			{
+				ProcessResult(Problem.GradeResponse(number));
+			}
+		}
+
+		public void EndSession()
+		{
+			TimeRemaining = 0;
 		}
 	}
 

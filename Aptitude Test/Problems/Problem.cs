@@ -21,6 +21,6 @@
 	/// </summary>
 	public enum ProblemEvaluation
 	{
-		Correct, Incorrect, Invalid
+		Correct, Incorrect, Invalid, Null
 	}
 }

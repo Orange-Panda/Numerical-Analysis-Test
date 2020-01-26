@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Timers;
 using System.Windows;
 using System.Windows.Input;
@@ -12,14 +13,17 @@ namespace Aptitude_Test
 	{
 		private TestSession testSession;
 		public static Timer timer = new Timer(100);
+		private WindowState windowState;
 
 		public MainWindow()
 		{
 			InitializeComponent();
 
+			windowState = Aptitude_Test.WindowState.Welcome;
 			timer.Elapsed += Timer_Elapsed;
 			timer.AutoReset = true;
 			timer.Enabled = true;
+			UpdateUI();
 		}
 
 		private void Timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -28,8 +32,7 @@ namespace Aptitude_Test
 
 			Dispatcher.Invoke(() =>
 			{
-				TimeSpan timeSpan = TimeSpan.FromSeconds(testSession.TimeRemaining);
-				Clock.Text = string.Format("{0}:{1:D2}", timeSpan.Minutes, timeSpan.Seconds);
+				UpdateUI();
 			});
 
 		}
@@ -39,24 +42,55 @@ namespace Aptitude_Test
 		/// </summary>
 		public void Begin()
 		{
-			testSession = new TestSession();
-			UpdateEquations();
+			if (testSession == null || !testSession.TestActive)
+			{
+				testSession = new TestSession();
+				windowState = Aptitude_Test.WindowState.Testing;
+				UpdateUI();
+			}
+		}
+
+		public void Stop()
+		{
+			if (testSession != null)
+			{
+				testSession.EndSession();
+				UpdateUI();
+			}
 		}
 
 		/// <summary>
 		/// Draws the equations to the screen
 		/// </summary>
-		public void UpdateEquations()
+		public void UpdateUI()
 		{
-			LEGProblemPanel.Visibility = testSession.Problem.GetType() == typeof(LEGProblem) ? Visibility.Visible : Visibility.Hidden;
-			MultipleChoicePanel.Visibility = testSession.Problem.GetType() == typeof(MultipleChoiceProblem) ? Visibility.Visible : Visibility.Hidden;
+			//Update timer, score, and difficulty
+			TimeSpan timeSpan = TimeSpan.FromSeconds(testSession != null ? testSession.TimeRemaining : 120);
+			Clock.Text = string.Format("{0}:{1:D2}", timeSpan.Minutes, timeSpan.Seconds);
+			Score.Text = testSession != null ? testSession.Score.ToString() : "0";
+			Difficulty.Text = string.Concat(Enumerable.Repeat('★', testSession != null ? (int)testSession.CurrentLevel : 0));
 
-			if (testSession.Problem.GetType() == typeof(LEGProblem))
+			//Scoring feedback
+			Scoring.Visibility = testSession != null && testSession.TestActive ? Visibility.Visible : Visibility.Hidden;
+			Scoring.Text = testSession != null && testSession.LastEvaluation != ProblemEvaluation.Null ? string.Format("{0}! {1}", testSession.LastEvaluation.ToString(), GetScoringString()) : "";
+
+			//Panel visibility
+			if (windowState == Aptitude_Test.WindowState.Testing && !testSession.TestActive)
+				windowState = Aptitude_Test.WindowState.Results;
+			bool testing = windowState == Aptitude_Test.WindowState.Testing && testSession != null;
+			WelcomePanel.Visibility = windowState == Aptitude_Test.WindowState.Welcome ? Visibility.Visible : Visibility.Hidden;
+			LEGProblemPanel.Visibility = testing && testSession.Problem.GetType() == typeof(LEGProblem) ? Visibility.Visible : Visibility.Hidden;
+			MultipleChoicePanel.Visibility = testing && testSession.Problem.GetType() == typeof(MultipleChoiceProblem) ? Visibility.Visible : Visibility.Hidden;
+			ResultsPanel.Visibility = windowState == Aptitude_Test.WindowState.Results ? Visibility.Visible : Visibility.Hidden; 
+
+			//Panel contents
+			if (testSession != null && testSession.Problem.GetType() == typeof(LEGProblem))
 			{
 				LeftAnswer.Text = ((LEGProblem)testSession.Problem).Left.GetString();
 				RightAnswer.Text = ((LEGProblem)testSession.Problem).Right.GetString();
+				LEGInsutrction.Visibility = testSession.CurrentLevel == Aptitude_Test.Difficulty.Introduction ? Visibility.Visible : Visibility.Hidden;
 			}
-			else if (testSession.Problem.GetType() == typeof(MultipleChoiceProblem))
+			else if (testSession != null && testSession.Problem.GetType() == typeof(MultipleChoiceProblem))
 			{
 				MultipleChoiceProblem problem = (MultipleChoiceProblem)testSession.Problem;
 				Equation.Text = problem.Equation.GetMysteryString(problem.MysteryIndex);
@@ -64,7 +98,18 @@ namespace Aptitude_Test
 				MC2.Text = problem.Answers[1].ToString();
 				MC3.Text = problem.Answers[2].ToString();
 				MC4.Text = problem.Answers[3].ToString();
+				MCInstruction.Visibility = testSession.CurrentLevel == Aptitude_Test.Difficulty.Introduction ? Visibility.Visible : Visibility.Hidden;
 			}
+			else if (testSession != null)
+			{
+
+			}
+		}
+
+		private string GetScoringString()
+		{
+			if (testSession == null || testSession.LastEvaluation == ProblemEvaluation.Invalid) return "";
+			else return string.Format("({0}{1})", testSession.LastScoreGain > 0 ? "+" : "", testSession.LastScoreGain.ToString()) ;
 		}
 
 		#region Events
@@ -86,8 +131,16 @@ namespace Aptitude_Test
 			{
 				testSession.UserInput(3);
 			}
+			else if (e.Key == Key.Enter)
+			{
+				Begin();
+			}
+			else if (e.Key == Key.Escape)
+			{
+				Stop();
+			}
 
-			UpdateEquations();
+			UpdateUI();
 		}
 
 		private void Start_Click(object sender, RoutedEventArgs e)
@@ -95,5 +148,10 @@ namespace Aptitude_Test
 			Begin();
 		}
 		#endregion
+	}
+
+	public enum WindowState
+	{
+		Welcome, Testing, Results
 	}
 }

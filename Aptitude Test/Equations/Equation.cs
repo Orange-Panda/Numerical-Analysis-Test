@@ -7,6 +7,9 @@ namespace Aptitude_Test
 	/// </summary>
 	public abstract class Equation
 	{
+		internal Stack<double> numbers;
+		internal Stack<Operator> operators;
+
 		/// <summary>
 		/// Get the answer value to the equation
 		/// </summary>

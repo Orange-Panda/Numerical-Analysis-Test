@@ -103,5 +103,24 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\LEGInstruction.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\MCInstructions.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Key1.png" />
+    <Resource Include="Images\Key2.png" />
+    <Resource Include="Images\Key3.png" />
+    <Resource Include="Images\Key4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\MCSmall.png" />
+    <Resource Include="Images\LEGSmall.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Logo.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

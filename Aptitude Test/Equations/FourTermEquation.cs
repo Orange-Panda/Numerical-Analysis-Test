@@ -26,7 +26,9 @@ namespace Aptitude_Test
 
 		public override double GetValue()
 		{
-			//TODO: A calculation queue would make this significantly more scalable.
+			return 0;
+
+
 			if ((int)op3 >= 2)
 			{
 				if ((int)op2 >= 2)

@@ -18,5 +18,22 @@
 			<Setter Property="Foreground" Value="White"/>
 			<Setter Property="TextAlignment" Value="Center"/>
 		</Style>
+		<Style x:Key="Text" TargetType="TextBlock">
+			<Setter Property="FontSize" Value="18"/>
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="TextAlignment" Value="Center"/>
+		</Style>
+		<Style x:Key="ButtonText" TargetType="TextBlock">
+			<Setter Property="Width" Value="96"/>
+			<Setter Property="Height" Value="64"/>
+			<Setter Property="FontSize" Value="48"/>
+			<Setter Property="Foreground" Value="#D804F7"/>
+			<Setter Property="TextAlignment" Value="Center"/>
+		</Style>
+		<Style x:Key="Keyboard" TargetType="Image">
+			<Setter Property="Width" Value="96"/>
+			<Setter Property="Height" Value="96"/>
+			<Setter Property="Margin" Value="24"/>
+		</Style>
 	</Application.Resources>
 </Application>

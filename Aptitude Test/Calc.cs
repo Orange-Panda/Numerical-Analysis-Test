@@ -93,9 +93,9 @@ namespace Aptitude_Test
 				case Difficulty.Hard:
 					return new ThreeTermEquation(new Range(3, 15), new Range(3, 15), new Range(3, 15), operators[OperatorCategory.Arithmetic], operators[OperatorCategory.Arithmetic]);
 				case Difficulty.Challenging:
-					return new ThreeTermEquation(new Range(5, 30), new Range(2, 5), new Range(3, 15), operators[OperatorCategory.Mod], operators[OperatorCategory.Arithmetic]);
 				case Difficulty.Maximum:
-					return new FourTermEquation(new Range(5, 30), new Range(2, 5), new Range(3, 15), new Range(3, 15), operators[OperatorCategory.Mod], operators[OperatorCategory.Arithmetic], operators[OperatorCategory.Arithmetic]);
+					return new ThreeTermEquation(new Range(5, 30), new Range(2, 5), new Range(3, 15), operators[OperatorCategory.Mod], operators[OperatorCategory.Arithmetic]);
+					//return new FourTermEquation(new Range(5, 30), new Range(2, 5), new Range(3, 15), new Range(3, 15), operators[OperatorCategory.Mod], operators[OperatorCategory.Arithmetic], operators[OperatorCategory.Arithmetic]);
 				default:
 					return new TwoTermEquation(new Range(1, 1), new Range(1, 1), operators[OperatorCategory.Mod]);
 			}

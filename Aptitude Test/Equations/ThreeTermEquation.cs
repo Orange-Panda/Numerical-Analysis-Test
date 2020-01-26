@@ -22,7 +22,7 @@ namespace Aptitude_Test
 
 		public override double GetValue()
 		{
-			if ((int)op2 >= 2)
+			if ((int)op1 < 2)
 			{
 				double rightResult = Calc.CalculateValue(num2, num3, op2);
 				return Math.Round(Calc.CalculateValue(num1, rightResult, op1), 1);

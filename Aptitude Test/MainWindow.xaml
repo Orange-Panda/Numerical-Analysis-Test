@@ -6,32 +6,83 @@
         xmlns:local="clr-namespace:Aptitude_Test"
         mc:Ignorable="d"
 		KeyDown="Window_KeyDown"
-        Title="MainWindow" Height="720" Width="1280">
-	<Grid Background="#FF191919">
-		<!--Welcome State-->
-		<Grid x:Name="WelcomePanel" Visibility="Hidden">
+        Title="MainWindow" Height="720" Width="1280" MinWidth="1024" MinHeight="600">
+	<Grid Background="#FF101010">
+		<!--Background-->
+		<Rectangle Fill="#FF151515" Stroke="#FF696969" Margin="10" StrokeThickness="3"/>
+
+		<Grid Margin="25">
+			<!--Welcome State-->
+			<Grid x:Name="WelcomePanel" Visibility="Visible">
+				<StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+					<Image Source="Images/Logo.png" Margin="32" HorizontalAlignment="Center" VerticalAlignment="Top" Width="512"/>
+					<TextBlock Foreground="White" TextAlignment="Center" Text="Welcome!" VerticalAlignment="Center" Height="48" Width="256" FontSize="32" HorizontalAlignment="Center"/>
+					<TextBlock Foreground="White" TextAlignment="Center" Text="Press [Enter] to begin test!" VerticalAlignment="Center" Height="48" Width="384" FontSize="18" HorizontalAlignment="Center"/>
+				</StackPanel>
+			</Grid>
+
+			<!--LEG Problem-->
+			<Grid x:Name="LEGProblemPanel" Visibility="Hidden">
+				<Grid x:Name="LEGInsutrction" Margin="64">
+					<Image Source="Images/LEGSmall.png" HorizontalAlignment="Center" VerticalAlignment="Top" Width="512"/>
+				</Grid>
+				<TextBlock Text="1 + 1" Style="{ StaticResource Equation }" x:Name="LeftAnswer" HorizontalAlignment="Left"/>
+				<TextBlock Text="2 + 1" Style="{ StaticResource Equation }" x:Name="RightAnswer" HorizontalAlignment="Right"/>
+				<StackPanel VerticalAlignment="Bottom" Margin="0,0,0,32" HorizontalAlignment="Center" Orientation="Horizontal">
+					<StackPanel>
+						<TextBlock Text="&gt;" Style="{StaticResource ButtonText}"/>
+						<Image Source="Images/Key1.png" Style="{StaticResource Keyboard }"/>
+					</StackPanel>
+					<StackPanel>
+						<TextBlock Text="&lt;" Style="{StaticResource ButtonText}"/>
+						<Image Source="Images/Key2.png" Style="{StaticResource Keyboard }"/>
+					</StackPanel>
+					<StackPanel>
+						<TextBlock Text="==" Style="{StaticResource ButtonText}"/>
+						<Image Source="Images/Key3.png" Style="{StaticResource Keyboard }"/>
+					</StackPanel>
+				</StackPanel>
+			</Grid>
+
+			<!--Multiple Choice Problem-->
+			<Grid x:Name="MultipleChoicePanel" Visibility="Hidden">
+				<Grid x:Name="MCInstruction" Margin="64">
+					<Image Source="Images/MCSmall.png" HorizontalAlignment="Center" VerticalAlignment="Top" Width="512"/>
+				</Grid>
+				<TextBlock Text="1 + __ = 3" Style="{ StaticResource Equation }" x:Name="Equation" HorizontalAlignment="Center" Width="Auto"/>
+				<StackPanel VerticalAlignment="Bottom" Margin="0,0,0,32" HorizontalAlignment="Center" Orientation="Horizontal">
+					<StackPanel>
+						<TextBlock Text="1" x:Name="MC1" Style="{StaticResource ButtonText}"/>
+						<Image Source="Images/Key1.png" Style="{StaticResource Keyboard }"/>
+					</StackPanel>
+					<StackPanel>
+						<TextBlock Text="2" x:Name="MC2" Style="{StaticResource ButtonText}"/>
+						<Image Source="Images/Key2.png" Style="{StaticResource Keyboard }"/>
+					</StackPanel>
+					<StackPanel>
+						<TextBlock Text="3" x:Name="MC3" Style="{StaticResource ButtonText}"/>
+						<Image Source="Images/Key3.png" Style="{StaticResource Keyboard }"/>
+					</StackPanel>
+					<StackPanel>
+						<TextBlock Text="4" x:Name="MC4" Style="{StaticResource ButtonText}"/>
+						<Image Source="Images/Key4.png" Style="{StaticResource Keyboard }"/>
+					</StackPanel>
+				</StackPanel>
+			</Grid>
 			
+			<!--Results-->
+			<Grid x:Name="ResultsPanel" Visibility="Hidden">
+				<StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+					<TextBlock Foreground="White" TextAlignment="Center" Text="Test Completed!" VerticalAlignment="Center" Height="48" Width="256" FontSize="32" HorizontalAlignment="Center"/>
+					<TextBlock Foreground="White" TextAlignment="Center" Text="Press [Enter] to begin a new test!" VerticalAlignment="Center" Height="48" Width="384" FontSize="18" HorizontalAlignment="Center"/>
+				</StackPanel>
+			</Grid>
+			
+			<!--Constants-->
+			<TextBlock Foreground="White" TextAlignment="Center" Text="2:00" x:Name="Clock" VerticalAlignment="Top" Height="48" Width="256" FontSize="32"/>
+			<TextBlock Foreground="White" TextAlignment="Left" Text="0" x:Name="Score" VerticalAlignment="Top" Height="48" Width="256" FontSize="32" HorizontalAlignment="Left"/>
+			<TextBlock Foreground="White" TextAlignment="Right" Text="★" x:Name="Difficulty" VerticalAlignment="Top" Height="48" Width="256" FontSize="32" HorizontalAlignment="Right"/>
+			<TextBlock Foreground="White" TextAlignment="Left" Text="" x:Name="Scoring" VerticalAlignment="Bottom" Height="48" Width="512" FontSize="32" HorizontalAlignment="Left"/>
 		</Grid>
-		
-		<!--LEG Problem-->
-		<Grid x:Name="LEGProblemPanel" Visibility="Hidden">
-			<TextBlock Text="1 + 1" Style="{ StaticResource Equation }" x:Name="LeftAnswer" HorizontalAlignment="Left"/>
-			<TextBlock Text="2 + 1" Style="{ StaticResource Equation }" x:Name="RightAnswer" HorizontalAlignment="Right"/>
-		</Grid>
-		
-		<!--Multiple Choice Problem-->
-		<Grid x:Name="MultipleChoicePanel" Visibility="Hidden">
-			<TextBlock Text="1 + __ = 3" Style="{ StaticResource Equation }" x:Name="Equation" HorizontalAlignment="Center" Width="Auto"/>
-			<DockPanel VerticalAlignment="Bottom" Margin="0,0,0,90" LastChildFill="False" HorizontalAlignment="Center">
-				<TextBlock Text="1" Style="{ StaticResource Choice }" x:Name="MC1" HorizontalAlignment="Center"/>
-				<TextBlock Text="2" Style="{ StaticResource Choice }" x:Name="MC2" HorizontalAlignment="Center"/>
-				<TextBlock Text="3" Style="{ StaticResource Choice }" x:Name="MC3" HorizontalAlignment="Center"/>
-				<TextBlock Text="4" Style="{ StaticResource Choice }" x:Name="MC4" HorizontalAlignment="Center"/>
-			</DockPanel>
-		</Grid>
-		
-		<!--Constants-->
-		<TextBlock Foreground="White" TextAlignment="Center" Text="2:00" x:Name="Clock" VerticalAlignment="Top" Height="48" Width="256" FontSize="32"/>
-		<Button Content="Start" x:Name="Start" Click="Start_Click" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="128" Height="64" FontSize="36"/>
 	</Grid>
 </Window>
